@@ -52,6 +52,30 @@ Useimmat lukijat tarjoavat myös automaattisen tunnistuksen: kun syötät
 pelkän sivuston osoitteen ([{{siteUrl}}]({{siteUrl}})), lukija löytää
 syötteen automaattisesti sivun `<link rel="alternate">`-tagin perusteella.
 
+## Haluan mieluummin sähköpostia
+
+Beerss itse **ei lähetä sähköpostia eikä ylläpidä postituslistaa** — mutta
+voit halutessasi käyttää ulkopuolista palvelua, joka muuntaa minkä tahansa
+RSS-syötteen sähköpostiviesteiksi omaan inboxiisi. Sinä päätät osoitteen,
+tiheyden ja koska peruutat; kerho ei näe listaasi eikä osoitettasi.
+
+Suosittuja ilmaisia palveluja:
+
+- **[Blogtrottr](https://blogtrottr.com/)** — yksinkertaisin: liitä
+  syötteen osoite ja sähköpostiosoitteesi, valitse tiheys (heti / päivittäin
+  / viikoittain), valmista. Ei rekisteröitymistä.
+- **[Feedrabbit](https://feedrabbit.com/)** — vaatii tilin, mutta tarjoaa
+  siistimmät koosteet ja paremmat asetukset.
+- **[IFTTT](https://ifttt.com/explore/rss-to-email)** tai
+  **[Zapier](https://zapier.com/apps/rss/integrations/email)** — jos käytät
+  näitä jo muutenkin, niiden valmiit "RSS → email"-reseptit toimivat
+  hyvin.
+
+Käytä syötteen osoitteena ylempänä olevaa `{{feedUrl}}`-linkkiä. Palvelut
+ovat kolmannen osapuolen tarjoamia: niiden ehdot, tietosuoja ja toimitusvarmuus
+ovat niiden omalla vastuulla, eikä Beerssillä ole näkyvyyttä tai vaikutusvaltaa
+listaasi.
+
 ## Mikä RSS oikeastaan on?
 
 RSS (Really Simple Syndication) on yli 20 vuotta vanha avoin standardi
