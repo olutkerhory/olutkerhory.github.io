@@ -1,0 +1,22 @@
+{
+  "name": "beer-events-rss",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Olutkerho beer-events blog: markdown posts in posts/, rendered to static HTML and an RSS feed, deployed to GitHub Pages.",
+  "scripts": {
+    "build": "tsx src/build.ts",
+    "serve": "tsx src/build.ts && python3 -m http.server --directory dist 8000",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "feed": "^4.2.2",
+    "gray-matter": "^4.0.3",
+    "marked": "^14.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
