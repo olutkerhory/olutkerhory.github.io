@@ -1,12 +1,12 @@
-# beer-events-rss
+# olutkerhory.github.io
 
 **Beerss** — olutkerhon yksinkertainen blogi. Markdown-postaukset ja
 -staattiset sivut käännetään staattiseksi sivustoksi ja RSS-syötteeksi,
 julkaistaan GitHub Pagesissa.
 
-**Julkaistu sivusto:** <https://olutkerho.github.io/beer-events-rss/>
-**RSS-syöte:** <https://olutkerho.github.io/beer-events-rss/rss.xml>
-**Tilaus-ohje:** <https://olutkerho.github.io/beer-events-rss/subscribe.html>
+**Julkaistu sivusto:** <https://olutkerhory.github.io/>
+**RSS-syöte:** <https://olutkerhory.github.io/rss.xml>
+**Tilaus-ohje:** <https://olutkerhory.github.io/subscribe.html>
 
 ## Miten tämä toimii
 
@@ -132,7 +132,7 @@ Pushaa `main`-haaraan → workflow rakentaa ja deployaa sivuston automaattisesti
 
 Repo on **julkinen lukuoikeuksin** — kuka tahansa voi kloonata, forkata ja
 lähettää pull requesteja. **Suora push-oikeus** on rajattu
-[olutkerho-organisaation](https://github.com/orgs/olutkerho/people) jäsenille
+[olutkerhory-organisaation](https://github.com/orgs/olutkerhory/people) jäsenille
 ja erikseen lisätyille collaborator-tunnuksille.
 
 Jos haluat kirjoitusoikeuden, katso [CONTRIBUTING.md](./CONTRIBUTING.md).
