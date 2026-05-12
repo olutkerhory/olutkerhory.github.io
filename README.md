@@ -1,28 +1,42 @@
 # beer-events-rss
 
-**Beerss** — olutkerhon yksinkertainen blogi. Markdown-postaukset elävät
-kansiossa `posts/`, käännetään staattiseksi sivustoksi ja RSS-syötteeksi,
+**Beerss** — olutkerhon yksinkertainen blogi. Markdown-postaukset ja
+-staattiset sivut käännetään staattiseksi sivustoksi ja RSS-syötteeksi,
 julkaistaan GitHub Pagesissa.
 
 **Julkaistu sivusto:** <https://olutkerho.github.io/beer-events-rss/>
 **RSS-syöte:** <https://olutkerho.github.io/beer-events-rss/rss.xml>
+**Tilaus-ohje:** <https://olutkerho.github.io/beer-events-rss/subscribe.html>
 
 ## Miten tämä toimii
 
 ```
-posts/*.md   ──┐
-public/*     ──┤                           ┌── dist/index.html
-src/build.ts ──┼─►  npm run build  ──►    ├── dist/posts/<slug>.html
-src/templates  ─┘                          ├── dist/rss.xml
-                                           └── dist/styles.css (yms. public/:sta)
+posts/*.md   ──┐                              ┌── dist/index.html
+pages/*.md   ──┤                              ├── dist/posts/<slug>.html
+public/*     ──┼──►  npm run build  ──►       ├── dist/<page-slug>.html
+src/build.ts ──┤                              ├── dist/rss.xml
+src/templates  ┘                              └── dist/styles.css (yms. public/:sta)
 ```
 
-1. **Lähdesisältö** elää kansiossa `posts/` (yksi markdown-tiedosto per postaus,
-   YAML-frontmatterilla) ja `public/` (CSS, kuvat, suoraan kopioitavat tiedostot).
-2. **Build-skripti** `src/build.ts` (TypeScript, ajetaan `tsx`:llä) lukee postaukset,
-   parsii frontmatterin (`gray-matter`), renderöi markdownin HTML:ksi (`marked`),
-   sijoittaa sisällön HTML-pohjiin (`src/templates/`) ja kirjoittaa lopputuloksen
-   `dist/`-kansioon. RSS-syöte tuotetaan `feed`-kirjastolla.
+Sisällöllä on kaksi muotoa:
+
+- **Postaukset** (`posts/`) — aikaleimattuja, ilmestyvät etusivun listalla ja
+  RSS-syötteessä. Käytä näitä tapahtumakutsuihin, maistelumuistiinpanoihin
+  ja muihin "uutisiin".
+- **Sivut** (`pages/`) — pysyvää sisältöä (esim. tilaus-ohje, tietoja),
+  ei aikaleimaa, **ei** mukana etusivulla eikä RSS-syötteessä. Linkitä
+  navigaatiosta tai muista sivuista.
+
+Pipeline:
+
+1. **Lähdesisältö** elää kansioissa `posts/`, `pages/` (markdown-tiedostot
+   YAML-frontmatterilla) ja `public/` (CSS, kuvat, suoraan kopioitavat
+   tiedostot).
+2. **Build-skripti** `src/build.ts` (TypeScript, ajetaan `tsx`:llä) lukee
+   sisällön, parsii frontmatterin (`gray-matter`), renderöi markdownin
+   HTML:ksi (`marked`), sijoittaa sisällön HTML-pohjiin (`src/templates/`)
+   ja kirjoittaa lopputuloksen `dist/`-kansioon. RSS-syöte (vain postauksista)
+   tuotetaan `feed`-kirjastolla.
 3. **GitHub Actions** (`.github/workflows/deploy.yml`) ajaa buildin jokaisella
    pushilla `main`-haaraan ja julkaisee `dist/`-kansion GitHub Pagesissa.
    Build-vaihe saa oikean julkisen URL:n env-muuttujasta `SITE_URL`, joka tulee
@@ -33,12 +47,14 @@ src/templates  ─┘                          ├── dist/rss.xml
 
 | Polku | Mitä |
 |---|---|
-| `posts/` | Markdown-postaukset. Tiedostonimestä tulee URL-slug. |
+| `posts/` | Aikaleimatut postaukset. Tiedostonimestä tulee URL-slug. Päätyvät RSS-syötteeseen. |
+| `pages/` | Pysyvät sivut (esim. `subscribe.md`). Eivät päädy etusivun listalle eivätkä RSS-syötteeseen. |
 | `public/` | Staattiset tiedostot (CSS, kuvat). Kopioidaan suoraan `dist/`:in juureen. |
-| `src/build.ts` | Build-pipeline (n. 150 riviä). |
+| `src/build.ts` | Build-pipeline (n. 200 riviä). |
 | `src/templates/base.html` | Sivun ulkokuori (head, header, footer). |
 | `src/templates/index.html` | Etusivun runko, sisältää `{{posts}}`-listamerkin. |
 | `src/templates/post.html` | Yksittäisen postauksen runko. |
+| `src/templates/page.html` | Yksittäisen pysyvän sivun runko. |
 | `.github/workflows/deploy.yml` | GitHub Pages -deployaus. |
 | `dist/` | Build-tuloste. Ei versionhallinnassa. |
 
@@ -61,6 +77,38 @@ Postauksen sisältö Markdownina.
 
 Tiedostonimestä tulee URL-slug (esim. `2026-05-20-trappistit.md` →
 `/posts/2026-05-20-trappistit.html`).
+
+## Pysyvän sivun lisääminen
+
+Tee uusi `.md`-tiedosto kansioon `pages/`. Frontmatter on minimaalinen:
+
+```yaml
+---
+title: "Tietoja"
+description: "Yhteenveto sivun sisällöstä (käytetään `<title>`/SEO:hon)."
+---
+
+Sivun sisältö Markdownina.
+```
+
+Tiedostonimestä tulee URL-slug suoraan juuressa
+(esim. `pages/tietoja.md` → `/tietoja.html`).
+
+**Sivuston ja syötteen URL placeholderit:** sivujen markdownissa voi käyttää
+seuraavia placeholdereita, jotka korvataan build-vaiheessa oikeilla
+URL-osoitteilla:
+
+| Placeholder | Korvataan |
+|---|---|
+| `{{siteUrl}}` | Sivuston juuri (esim. `https://olutkerho.github.io/beer-events-rss/`) |
+| `{{feedUrl}}` | RSS-syötteen täysi URL (esim. `https://olutkerho.github.io/beer-events-rss/rss.xml`) |
+
+Tämä on hyödyllistä mm. koodilohkoissa joihin halutaan näyttää linkin
+osoite kokonaisuudessaan. Postauksissa placeholderit **eivät** ole käytössä
+— ne ovat vain sivuille (`pages/`).
+
+Jos haluat sivun näkyvän navigaatiossa, lisää linkki tiedostoon
+`src/templates/base.html` (`<nav>`-lohkoon).
 
 ## Paikallinen kehitys
 

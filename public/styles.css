@@ -150,7 +150,8 @@ h1, h2, h3 { line-height: 1.25; }
   margin-bottom: 1.5rem;
 }
 
-.post pre {
+.post pre,
+.page pre {
   background: #1a1a1a;
   color: #f5f5f5;
   padding: 0.75rem 1rem;
@@ -158,13 +159,21 @@ h1, h2, h3 { line-height: 1.25; }
   border-radius: 4px;
 }
 
-.post code {
+.post code,
+.page code {
   background: var(--border);
   padding: 0 0.25rem;
   border-radius: 3px;
 }
 
-.post pre code { background: transparent; padding: 0; }
+.post pre code,
+.page pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.page { margin-bottom: 2rem; }
+.page .back { font-size: 0.9rem; }
 
 .site-footer {
   border-top: 1px solid var(--border);

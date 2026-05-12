@@ -8,6 +8,7 @@ import { Feed } from "feed";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const POSTS_DIR = join(ROOT, "posts");
+const PAGES_DIR = join(ROOT, "pages");
 const PUBLIC_DIR = join(ROOT, "public");
 const TEMPLATES_DIR = join(__dirname, "templates");
 const DIST_DIR = join(ROOT, "dist");
@@ -18,6 +19,7 @@ const SITE_TITLE = "Beerss";
 const SITE_DESCRIPTION = "Olutkerhon maistelut, tapahtumat ja kuulumiset.";
 const SITE_LANGUAGE = "fi";
 const GITHUB_URL = process.env.GITHUB_URL ?? "https://github.com/olutkerhory/beer-events-rss";
+const FEED_URL = `${SITE_URL}rss.xml`;
 
 marked.setOptions({ gfm: true });
 
@@ -31,6 +33,12 @@ type Post = {
   tags: string[];
   bodyHtml: string;
   url: string;
+};
+
+type Page = {
+  slug: string;
+  title: string;
+  bodyHtml: string;
 };
 
 const dateFmt = new Intl.DateTimeFormat("fi-FI", { day: "numeric", month: "long", year: "numeric" });
@@ -82,6 +90,24 @@ async function loadPosts(): Promise<Post[]> {
   }
   posts.sort((a, b) => b.date.getTime() - a.date.getTime());
   return posts;
+}
+
+async function loadPages(): Promise<Page[]> {
+  if (!(await exists(PAGES_DIR))) return [];
+  const files = (await readdir(PAGES_DIR)).filter((f) => f.endsWith(".md"));
+  const pages: Page[] = [];
+  for (const file of files) {
+    const raw = await readFile(join(PAGES_DIR, file), "utf8");
+    const { data, content } = matter(raw);
+    const slug = basename(file, extname(file));
+    if (typeof data.title !== "string" || !data.title) throw new Error(`${file}: missing "title"`);
+    // Substitute site/feed URLs in raw markdown so they end up resolved in code blocks and links alike.
+    const substituted = content
+      .replace(/\{\{siteUrl\}\}/g, SITE_URL)
+      .replace(/\{\{feedUrl\}\}/g, FEED_URL);
+    pages.push({ slug, title: data.title, bodyHtml: await marked.parse(substituted) });
+  }
+  return pages;
 }
 
 const fill = (tpl: string, vars: Record<string, string>): string =>
@@ -146,11 +172,13 @@ async function main(): Promise<void> {
   await rm(DIST_DIR, { recursive: true, force: true });
   await mkdir(DIST_DIR, { recursive: true });
 
-  const [baseTpl, indexTpl, postTpl, posts] = await Promise.all([
+  const [baseTpl, indexTpl, postTpl, pageTpl, posts, pages] = await Promise.all([
     readFile(join(TEMPLATES_DIR, "base.html"), "utf8"),
     readFile(join(TEMPLATES_DIR, "index.html"), "utf8"),
     readFile(join(TEMPLATES_DIR, "post.html"), "utf8"),
+    readFile(join(TEMPLATES_DIR, "page.html"), "utf8"),
     loadPosts(),
+    loadPages(),
   ]);
 
   for (const post of posts) {
@@ -183,13 +211,32 @@ async function main(): Promise<void> {
   });
   await writePage(join(DIST_DIR, "index.html"), indexHtml);
 
+  for (const page of pages) {
+    const inner = fill(pageTpl, {
+      pageTitle: escapeHtml(page.title),
+      pageBody: page.bodyHtml,
+      siteUrl: escapeHtml(SITE_URL),
+    });
+    const html = fill(baseTpl, {
+      title: `${escapeHtml(page.title)} — Beerss`,
+      content: inner,
+      siteUrl: escapeHtml(SITE_URL),
+      githubUrl: escapeHtml(GITHUB_URL),
+    });
+    await writePage(join(DIST_DIR, `${page.slug}.html`), html);
+  }
+
   await writeFile(join(DIST_DIR, "rss.xml"), buildFeed(posts), "utf8");
 
   if (await exists(PUBLIC_DIR)) {
     await cp(PUBLIC_DIR, DIST_DIR, { recursive: true });
   }
 
-  console.log(`Built ${posts.length} post${posts.length === 1 ? "" : "s"} → ${DIST_DIR}`);
+  console.log(
+    `Built ${posts.length} post${posts.length === 1 ? "" : "s"} and ${pages.length} page${
+      pages.length === 1 ? "" : "s"
+    } → ${DIST_DIR}`,
+  );
   console.log(`Site URL: ${SITE_URL}`);
 }
 
