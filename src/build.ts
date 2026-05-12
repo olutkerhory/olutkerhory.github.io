@@ -20,6 +20,7 @@ const SITE_DESCRIPTION = "Olutkerhon maistelut, tapahtumat ja kuulumiset.";
 const SITE_LANGUAGE = "fi";
 const GITHUB_URL = process.env.GITHUB_URL ?? "https://github.com/olutkerhory/olutkerhory.github.io";
 const FEED_URL = `${SITE_URL}rss.xml`;
+const ATOM_FEED_URL = `${SITE_URL}atom.xml`;
 
 marked.setOptions({ gfm: true });
 
@@ -104,7 +105,8 @@ async function loadPages(): Promise<Page[]> {
     // Substitute site/feed URLs in raw markdown so they end up resolved in code blocks and links alike.
     const substituted = content
       .replace(/\{\{siteUrl\}\}/g, SITE_URL)
-      .replace(/\{\{feedUrl\}\}/g, FEED_URL);
+      .replace(/\{\{feedUrl\}\}/g, FEED_URL)
+      .replace(/\{\{atomFeedUrl\}\}/g, ATOM_FEED_URL);
     pages.push({ slug, title: data.title, bodyHtml: await marked.parse(substituted) });
   }
   return pages;
@@ -143,14 +145,14 @@ async function writePage(outPath: string, html: string): Promise<void> {
   await writeFile(outPath, html, "utf8");
 }
 
-function buildFeed(posts: Post[]): string {
+function buildFeed(posts: Post[]): Feed {
   const feed = new Feed({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     id: SITE_URL,
     link: SITE_URL,
     language: SITE_LANGUAGE,
-    feedLinks: { rss2: `${SITE_URL}rss.xml` },
+    feedLinks: { rss2: FEED_URL, atom: ATOM_FEED_URL },
     copyright: `© ${new Date().getFullYear()} Beerss`,
     updated: posts[0]?.date ?? new Date(),
   });
@@ -165,7 +167,7 @@ function buildFeed(posts: Post[]): string {
       category: post.tags.map((name) => ({ name })),
     });
   }
-  return feed.rss2();
+  return feed;
 }
 
 async function main(): Promise<void> {
@@ -226,7 +228,9 @@ async function main(): Promise<void> {
     await writePage(join(DIST_DIR, `${page.slug}.html`), html);
   }
 
-  await writeFile(join(DIST_DIR, "rss.xml"), buildFeed(posts), "utf8");
+  const feed = buildFeed(posts);
+  await writeFile(join(DIST_DIR, "rss.xml"), feed.rss2(), "utf8");
+  await writeFile(join(DIST_DIR, "atom.xml"), feed.atom1(), "utf8");
 
   if (await exists(PUBLIC_DIR)) {
     await cp(PUBLIC_DIR, DIST_DIR, { recursive: true });

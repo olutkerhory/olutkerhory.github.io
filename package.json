@@ -6,7 +6,7 @@
   "description": "Olutkerho beer-events blog: markdown posts in posts/, rendered to static HTML and an RSS feed, deployed to GitHub Pages.",
   "scripts": {
     "build": "tsx src/build.ts",
-    "serve": "tsx src/build.ts && python3 -m http.server --directory dist 8000",
+    "serve": "tsx src/build.ts && serve dist -l 8000",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
+    "serve": "^14.2.6",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }

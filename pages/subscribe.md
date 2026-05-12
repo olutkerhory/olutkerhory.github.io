@@ -15,6 +15,17 @@ Kopioi tämä osoite ja liitä se RSS-lukijaasi:
 {{feedUrl}}
 ```
 
+## Atom-syöte
+
+Tarjoamme myös saman sisällön **Atom**-muodossa. Atom on uudempi ja
+tiukemmin määritelty syötestandardi — käytännössä kaikki RSS-lukijat
+tukevat molempia, joten voit vapaasti valita kumman tahansa. Jos lukijasi
+ei jostain syystä pidä RSS-syötteestä, kokeile Atomia:
+
+```
+{{atomFeedUrl}}
+```
+
 ## Suositeltavat RSS-lukijat
 
 Selaimet eivät yleensä enää tue syötteitä suoraan, mutta ilmaisia lukijoita

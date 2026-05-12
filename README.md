@@ -115,7 +115,7 @@ Jos haluat sivun näkyvän navigaatiossa, lisää linkki tiedostoon
 ```bash
 npm install
 npm run build       # tuottaa dist/-kansion
-npm run serve       # build + python3 http.server porttiin 8000
+npm run serve       # build + serve dist porttiin 8000
 ```
 
 Avaa <http://localhost:8000>. RSS-syöte: <http://localhost:8000/rss.xml>.
