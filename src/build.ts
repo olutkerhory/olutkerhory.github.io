@@ -17,7 +17,7 @@ const SITE_URL = RAW_SITE_URL.endsWith("/") ? RAW_SITE_URL : `${RAW_SITE_URL}/`;
 const SITE_TITLE = "Beerss";
 const SITE_DESCRIPTION = "Olutkerhon maistelut, tapahtumat ja kuulumiset.";
 const SITE_LANGUAGE = "fi";
-const GITHUB_URL = process.env.GITHUB_URL ?? "https://github.com/olutkerho/beer-events-rss";
+const GITHUB_URL = process.env.GITHUB_URL ?? "https://github.com/olutkerhory/beer-events-rss";
 
 marked.setOptions({ gfm: true });
 
