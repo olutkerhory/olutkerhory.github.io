@@ -14,9 +14,10 @@ const DIST_DIR = join(ROOT, "dist");
 
 const RAW_SITE_URL = process.env.SITE_URL ?? "http://localhost:8000/";
 const SITE_URL = RAW_SITE_URL.endsWith("/") ? RAW_SITE_URL : `${RAW_SITE_URL}/`;
-const SITE_TITLE = "Olutkerho — beer events";
+const SITE_TITLE = "Beerss";
 const SITE_DESCRIPTION = "Olutkerhon maistelut, tapahtumat ja kuulumiset.";
 const SITE_LANGUAGE = "fi";
+const GITHUB_URL = process.env.GITHUB_URL ?? "https://github.com/olutkerho/beer-events-rss";
 
 marked.setOptions({ gfm: true });
 
@@ -124,7 +125,7 @@ function buildFeed(posts: Post[]): string {
     link: SITE_URL,
     language: SITE_LANGUAGE,
     feedLinks: { rss2: `${SITE_URL}rss.xml` },
-    copyright: `© ${new Date().getFullYear()} Olutkerho`,
+    copyright: `© ${new Date().getFullYear()} Beerss`,
     updated: posts[0]?.date ?? new Date(),
   });
   for (const post of posts) {
@@ -162,9 +163,10 @@ async function main(): Promise<void> {
       siteUrl: escapeHtml(SITE_URL),
     });
     const html = fill(baseTpl, {
-      title: `${escapeHtml(post.title)} — Olutkerho`,
+      title: `${escapeHtml(post.title)} — Beerss`,
       content: inner,
       siteUrl: escapeHtml(SITE_URL),
+      githubUrl: escapeHtml(GITHUB_URL),
     });
     await writePage(join(DIST_DIR, "posts", `${post.slug}.html`), html);
   }
@@ -177,6 +179,7 @@ async function main(): Promise<void> {
     title: SITE_TITLE,
     content: indexInner,
     siteUrl: escapeHtml(SITE_URL),
+    githubUrl: escapeHtml(GITHUB_URL),
   });
   await writePage(join(DIST_DIR, "index.html"), indexHtml);
 
