@@ -9,8 +9,8 @@ tags: [panimovierailu]
 
 Tervetuloa Olutkerhon järjestämälle panimovierailulle!
 
-Koska? 06.05.2026 - Klo 17.00
-Missä? Fat Lizard Taproom&Brewery ([text](https://www.fatlizard.beer/panimo))
+Koska? 06.05.2026 - Klo 17.00  
+Missä? Fat Lizard Taproom&Brewery ([Fat Lizard](https://www.fatlizard.beer/panimo))  
 Kustannus? 20e / osallistuja
 
 Olutkerho järjestää legendaariseksi muodostuneen panimovierailun (kolmas järjestyksessään). Tällä kertaa julkinen kulkuneuvo suunnataan kohti Espoota, tuota teekkareiden temmellyskenttää. Fat Lizard panimolle. Vierailuun kuuluu panimon esittely, ehkä salaisuuksia miten sitä Ankle Slapperia nyt sitten oikeasti pannaan ja tietysti olutmaistelu!
