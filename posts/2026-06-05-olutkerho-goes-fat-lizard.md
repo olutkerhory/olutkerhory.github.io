@@ -22,5 +22,4 @@ Haluatko mukaan? Ilmottaudu sähköpostilla tatu.helander@fraktio.fi
 
 ## Tilaa RSS
 
-Jos haluat seurata blogia, [RSS-syöte](../rss.xml) toimii kaikissa
-yleisimmissä lukijoissa.
+Jos haluat seurata blogia, [Tilaa](../subscribe.html)
