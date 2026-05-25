@@ -9,7 +9,7 @@ tags: [panimovierailu]
 
 Tervetuloa Olutkerhon järjestämälle panimovierailulle!
 
-Koska? 06.05.2026 - Klo 17.00  
+Koska? 05.06.2026 - Klo 17.00  
 Missä? Fat Lizard Taproom&Brewery ([Fat Lizard](https://www.fatlizard.beer/panimo))  
 Kustannus? 20e / osallistuja
 
