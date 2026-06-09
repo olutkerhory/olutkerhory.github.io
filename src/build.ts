@@ -24,6 +24,10 @@ const ATOM_FEED_URL = `${SITE_URL}atom.xml`;
 
 marked.setOptions({ gfm: true });
 
+// Puheenjohtajan postauksissa näkyvä leima ja sitä vastaava feed-kategoria.
+const CHAIR_LABEL = "Puheenjohtajan tiedote";
+const chairBadge = `<span class="badge badge-chair"><span class="badge-seal" aria-hidden="true"></span>${CHAIR_LABEL}</span>`;
+
 type Post = {
   slug: string;
   title: string;
@@ -32,6 +36,7 @@ type Post = {
   eventDate?: Date;
   eventLocation?: string;
   tags: string[];
+  isPuheenjohtajaPost: boolean;
   bodyHtml: string;
   url: string;
 };
@@ -85,6 +90,7 @@ async function loadPosts(): Promise<Post[]> {
       eventDate: data.eventDate ? toDate(data.eventDate, "eventDate", file) : undefined,
       eventLocation: typeof data.eventLocation === "string" ? data.eventLocation : undefined,
       tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
+      isPuheenjohtajaPost: data.isPuheenjohtajaPost === true,
       bodyHtml: await marked.parse(content),
       url: `${SITE_URL}posts/${slug}.html`,
     });
@@ -129,9 +135,11 @@ function renderEventMeta(post: Post): string {
 
 function renderPostListItem(post: Post): string {
   const event = renderEventMeta(post);
-  return `<li class="post-list-item">
+  const itemClass = post.isPuheenjohtajaPost ? "post-list-item is-chair" : "post-list-item";
+  const badge = post.isPuheenjohtajaPost ? ` ${chairBadge}` : "";
+  return `<li class="${itemClass}">
     <a class="post-list-link" href="${escapeHtml(post.url)}">
-      <span class="post-list-title">${escapeHtml(post.title)}</span>
+      <span class="post-list-title">${escapeHtml(post.title)}${badge}</span>
       <span class="post-list-meta">
         <time datetime="${post.date.toISOString()}">${escapeHtml(dateFmt.format(post.date))}</time>${event}
       </span>
@@ -157,6 +165,9 @@ function buildFeed(posts: Post[]): Feed {
     updated: posts[0]?.date ?? new Date(),
   });
   for (const post of posts) {
+    const categories = post.tags.map((name) => ({ name }));
+    // Rakenteellinen leima feediin: oma kategoria, jonka lukuohjelma voi suodattaa/korostaa.
+    if (post.isPuheenjohtajaPost) categories.unshift({ name: CHAIR_LABEL });
     feed.addItem({
       title: post.title,
       id: post.url,
@@ -164,7 +175,7 @@ function buildFeed(posts: Post[]): Feed {
       description: post.description,
       content: post.bodyHtml,
       date: post.date,
-      category: post.tags.map((name) => ({ name })),
+      category: categories,
     });
   }
   return feed;
@@ -190,6 +201,8 @@ async function main(): Promise<void> {
       date: post.date.toISOString(),
       dateFormatted: escapeHtml(dateFmt.format(post.date)),
       eventMeta: renderEventMeta(post),
+      postClass: post.isPuheenjohtajaPost ? " post-chair" : "",
+      authorBadge: post.isPuheenjohtajaPost ? `<p class="post-badge">${chairBadge}</p>` : "",
       siteUrl: escapeHtml(SITE_URL),
     });
     const html = fill(baseTpl, {
