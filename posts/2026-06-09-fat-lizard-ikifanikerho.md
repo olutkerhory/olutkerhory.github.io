@@ -5,6 +5,7 @@ description: "Tapahtumaraportti — panimovierailu Fat Lizardille"
 eventDate: 2026-06-05
 eventLocation: "Fat Lizard, Espoo"
 tags: [panimovierailu]
+isPuheenjohtajaPost: true
 ---
 
 On paljon sanoja, joita voisi käyttää upean Fat Lizardin toiminnasta. Ei kuitenkaan ole montaa sanaa, jotka eivät olisi ylistävän positiivisia, kun puhutaan tästä Suomen kirkkaimpiin johtajiin kuuluvasta pienpanimosta.

@@ -182,3 +182,74 @@ h1, h2, h3 { line-height: 1.25; }
   font-size: 0.85rem;
   text-align: center;
 }
+
+/* --- Puheenjohtajan postaus: leima + virallisempi tyylittely --- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.badge-chair {
+  background: linear-gradient(to bottom, #d8a32a 0%, var(--accent) 100%);
+  color: #fff;
+  border: 1px solid #8a6508;
+  box-shadow: 0 1px 2px rgba(42, 26, 5, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* Pieni vahasinetti-täplä leiman edessä. */
+.badge-seal {
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff6dd 0%, #f2cf6a 40%, #b8860b 100%);
+  border: 1px solid rgba(42, 26, 5, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+/* Etusivun listassa: leima otsikon perään, vasen kulta-aksentti riville. */
+.post-list-item.is-chair {
+  border-left: 3px solid var(--accent);
+  padding-left: 0.85rem;
+  background: linear-gradient(to right, rgba(184, 134, 11, 0.06), transparent 55%);
+}
+
+.post-list-item.is-chair .post-list-title .badge {
+  font-size: 0.62rem;
+  margin-left: 0.5em;
+}
+
+/* Postaussivulla: leima omalla rivillään otsikon yllä. */
+.post-badge {
+  margin: 0 0 0.75rem;
+}
+
+/* Koko postaus saa virallisemman raamin. */
+.post-chair {
+  border-left: 3px solid var(--accent);
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  background: linear-gradient(to right, rgba(184, 134, 11, 0.07), transparent 50%);
+}
+
+.post-chair h1 {
+  letter-spacing: 0.01em;
+}
+
+.post-chair h1::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  margin-top: 0.5rem;
+  background: var(--accent);
+  border-radius: 2px;
+}
